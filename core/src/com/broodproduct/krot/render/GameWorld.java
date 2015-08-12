@@ -15,11 +15,10 @@ public class GameWorld {
     private Body groundBody;
     private DestroBox destroBox;
 
-
     public GameWorld() {
         this.unitWidth = Constants.scaleToUnit(Constants.GAME_PIXEL_WIDTH);
         this.unitHeight = Constants.scaleToUnit(Constants.GAME_PIXEL_HEIGTH);
-        this.destroBox = new DestroBox(1, unitHeight - 3, 1, 1, boxWorld, this);
+        this.destroBox = new DestroBox(2, unitHeight - 12, 1, 1, boxWorld, this);
         this.krot = new Krot(unitWidth - 3, 1, 1.5f, 1.5f, boxWorld, this);
         //ground
         createWall(0, 0, unitWidth, 0.2f, "ground");
@@ -30,7 +29,7 @@ public class GameWorld {
         //right
         createWall(unitWidth, 0, 0.2f, unitHeight, "rightWall");
         //left Rack
-        createWall(2, 14, 2, 14, "rack");
+        createWall(2, 10, 2, 10, "rack");
         // we also need an invisible zero size ground body
         // to which we can connect the mouse joint
         groundBody = boxWorld.createBody(new BodyDef());

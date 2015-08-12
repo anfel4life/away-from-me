@@ -43,8 +43,12 @@ public class GameRenderer {
         font.draw(batcher, "Enter: reset ", Constants.GAME_PIXEL_WIDTH - 150, Constants.GAME_PIXEL_HEIGTH - 60);
         font.draw(batcher, "Space: pull forward ", Constants.GAME_PIXEL_WIDTH - 150, Constants.GAME_PIXEL_HEIGTH - 80);
         batcher.end();
+
+        //power bar
         sr.setProjectionMatrix(cam.combined);
-        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.setColor(Color.RED);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        sr.rect((Constants.GAME_PIXEL_WIDTH / 2) - 150, Constants.GAME_PIXEL_HEIGTH - 40, world.getDestroBox().getPullPower() * 50 , 20);
         sr.end();
     }
 
@@ -59,5 +63,6 @@ public class GameRenderer {
     public void dispose() {
         batcher.dispose();
         font.dispose();
+        sr.dispose();
     }
 }

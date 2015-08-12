@@ -18,6 +18,9 @@ public class DestroBox extends BaseModel {
     private static final float PARTICLES_TTL = 6f;
     private float particlesTime = 0;
     private boolean needToDestroy;
+    private boolean gainPullPower = false;
+    private float pullPower = 0;
+    private static final float MAX_PULL_POWER = 1f;
 
     public DestroBox(float x, float y, float width, float height, World boxWorld, GameWorld gameWorld) {
         super(x, y, width, height, boxWorld, gameWorld);
@@ -48,14 +51,16 @@ public class DestroBox extends BaseModel {
     public void pull() {
         if(body == null)
             reset();
-        body.applyForceToCenter(700, 0, true);
+        body.applyForceToCenter(5000 * pullPower, 0, true);
+        gainPullPower = false;
+        pullPower = 0;
     }
 
     public void reset() {
         if (body == null) {
             this.body = initBody();
         } else {
-            body.setTransform(1, gameWorld.unitHeight - 3, 0);
+            body.setTransform(this.origX, this.origY, 0);
             body.setLinearVelocity(new Vector2(0, 0));
         }
     }
@@ -71,6 +76,10 @@ public class DestroBox extends BaseModel {
         if (needToDestroy) {
             boom2();
             needToDestroy = false;
+        }
+        if(gainPullPower && pullPower < MAX_PULL_POWER) {
+            float sum = pullPower + delta;
+            pullPower = sum > MAX_PULL_POWER ? MAX_PULL_POWER : sum;
         }
     }
 
@@ -136,5 +145,13 @@ public class DestroBox extends BaseModel {
 
     public void setNeedToDestroy(boolean need) {
         needToDestroy = need;
+    }
+
+    public void gainPullPower() {
+        gainPullPower = true;
+    }
+
+    public float getPullPower() {
+        return pullPower;
     }
 }

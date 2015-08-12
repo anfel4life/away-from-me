@@ -116,7 +116,7 @@ public class InputHandler implements InputProcessor {
                 gameWorld.getDestroBox().pullAndFly(true);
                 break;
             case Input.Keys.SPACE:
-                gameWorld.getDestroBox().pull();
+                gameWorld.getDestroBox().gainPullPower();
                 break;
             case Input.Keys.ENTER:
                 gameWorld.getDestroBox().reset();
@@ -130,6 +130,11 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        switch (keycode){
+            case Input.Keys.SPACE:
+                gameWorld.getDestroBox().pull();
+                break;
+        }
         return false;
     }
 
