@@ -20,10 +20,11 @@ public class KrotContactListener implements ContactListener {
             getObj(obj1, obj2);
             if (krot != null && destroBox != null) {
                 destroBox.setNeedToDestroy(true);
-            } else if (destroBox != null && "ground".equals(unknown.toString())) {
+                krot.acceptDamage(100);
+            } else if (destroBox != null && unknown != null && "ground".equals(unknown.toString())) {
                 destroBox.setNeedToDestroy(true);
 
-            } else if (krot != null && ("rack".equals(unknown.toString()) || "rightWall".equals(unknown.toString())))
+            } else if (krot != null && unknown != null &&("rack".equals(unknown.toString()) || "rightWall".equals(unknown.toString())))
                 krot.changeDirection();
 
             destroBox = null;

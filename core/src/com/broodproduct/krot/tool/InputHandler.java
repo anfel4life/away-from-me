@@ -17,7 +17,6 @@ import com.broodproduct.krot.render.GameWorld;
 
 public class InputHandler implements InputProcessor {
     private final GameRenderer gameRenderer;
-    private final DestroBox destroBox;
     private GameWorld gameWorld;
     private Body hitBody = null;
     private float scaleFactorX;
@@ -37,7 +36,6 @@ public class InputHandler implements InputProcessor {
                         float scaleFactorY) {
         this.gameWorld = gameWorld;
         this.gameRenderer = gameRenderer;
-        this.destroBox = gameWorld.getDestroBox();
         this.scaleFactorX = scaleFactorX;
         this.scaleFactorY = scaleFactorY;
         this.shiftY = Gdx.graphics.getHeight() - gameWorld.unitHeight - 1;
@@ -109,20 +107,23 @@ public class InputHandler implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode){
-            case Input.Keys.R:
-                gameWorld.getDestroBox().pullAndFly(false);
-                break;
-            case Input.Keys.E:
-                gameWorld.getDestroBox().pullAndFly(true);
-                break;
+//            case Input.Keys.R:
+//                gameWorld.getDestroBox().pullAndFly(false);
+//                break;
+//            case Input.Keys.E:
+//                gameWorld.getDestroBox().pullAndFly(true);
+//                break;
+//            case Input.Keys.SPACE:
+//                gameWorld.getDestroBox().gainPullPower();
+//                break;
+//            case Input.Keys.ENTER:
+//                gameWorld.getDestroBox().reset();
+//                break;
+//            case Input.Keys.D:
+//                gameWorld.getDestroBox().boom2();
+//                break;
             case Input.Keys.SPACE:
-                gameWorld.getDestroBox().gainPullPower();
-                break;
-            case Input.Keys.ENTER:
-                gameWorld.getDestroBox().reset();
-                break;
-            case Input.Keys.D:
-                gameWorld.getDestroBox().boom2();
+                gameWorld.getFly().dropBomb();
                 break;
         }
         return false;
@@ -132,7 +133,7 @@ public class InputHandler implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch (keycode){
             case Input.Keys.SPACE:
-                gameWorld.getDestroBox().pull();
+                //gameWorld.getDestroBox().pull();
                 break;
         }
         return false;

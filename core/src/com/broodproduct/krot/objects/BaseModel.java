@@ -18,6 +18,7 @@ import java.util.List;
 public abstract class BaseModel {
     protected GameWorld gameWorld;
     protected World boxWorld;
+    //in PIXELS
     protected float origX, origY;
     protected Body body;
     protected Vector2 origin;

@@ -12,48 +12,16 @@ import java.util.List;
  * Created by Anfel
  * Brood Product Ukraine
  */
-public class DestroBox extends BaseModel {
+public class DestroBox extends DynamicModel {
 
     private List<Body> particles = new ArrayList<Body>();
     private static final float PARTICLES_TTL = 6f;
     private float particlesTime = 0;
     private boolean needToDestroy;
-    private boolean gainPullPower = false;
-    private float pullPower = 0;
-    private static final float MAX_PULL_POWER = 1f;
+
 
     public DestroBox(float x, float y, float width, float height, World boxWorld, GameWorld gameWorld) {
         super(x, y, width, height, boxWorld, gameWorld);
-    }
-
-    @Override
-    protected Body initBody() {
-        BodyDef bd = new BodyDef();
-        bd.position.set(origX, origY);
-        bd.type = BodyDef.BodyType.DynamicBody;
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(this.width, this.height);
-
-        FixtureDef fd = new FixtureDef();
-        fd.density = 0.4f;
-        fd.friction = 0.5f;
-        fd.restitution = 0.5f;
-        fd.shape = shape;
-
-        Body body = boxWorld.createBody(bd);
-        body.createFixture(fd);
-        body.setUserData(this);
-        shape.dispose();
-        return body;
-    }
-
-    public void pull() {
-        if(body == null)
-            reset();
-        body.applyForceToCenter(5000 * pullPower, 0, true);
-        gainPullPower = false;
-        pullPower = 0;
     }
 
     public void reset() {
@@ -66,20 +34,11 @@ public class DestroBox extends BaseModel {
     }
 
     @Override
-    protected Vector2 initOrigin() {
-        return new Vector2(origX, origY);
-    }
-
-    @Override
     public void update(float delta) {
         processParticles(delta);
         if (needToDestroy) {
             boom2();
             needToDestroy = false;
-        }
-        if(gainPullPower && pullPower < MAX_PULL_POWER) {
-            float sum = pullPower + delta;
-            pullPower = sum > MAX_PULL_POWER ? MAX_PULL_POWER : sum;
         }
     }
 
@@ -99,12 +58,7 @@ public class DestroBox extends BaseModel {
         particles.clear();
     }
 
-    public void pullAndFly(boolean left) {
-        if(body == null)
-            reset();
-        body.setLinearVelocity(new Vector2(0, 0));
-        body.applyLinearImpulse(left ? -10 : 10, 20, body.getPosition().x - 0.5f, body.getPosition().y - 0.5f, true);
-    }
+
 
     public void boom2() {
         Vector2 position = body.getPosition();
@@ -118,7 +72,7 @@ public class DestroBox extends BaseModel {
 
             PolygonShape shape = new PolygonShape();
 
-            shape.setAsBox(this.width / 2, this.height / 2);
+            shape.setAsBox((this.width / 4), (this.height / 4));
 
             FixtureDef fd = new FixtureDef();
             fd.density = 0.4f;
@@ -145,13 +99,5 @@ public class DestroBox extends BaseModel {
 
     public void setNeedToDestroy(boolean need) {
         needToDestroy = need;
-    }
-
-    public void gainPullPower() {
-        gainPullPower = true;
-    }
-
-    public float getPullPower() {
-        return pullPower;
     }
 }

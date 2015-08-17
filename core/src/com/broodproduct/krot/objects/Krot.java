@@ -8,35 +8,13 @@ import com.broodproduct.krot.render.GameWorld;
  * Created by Anfel
  * Brood Product Ukraine
  */
-public class Krot extends BaseModel {
-
+public class Krot extends DynamicModel {
     private boolean forward = true;
-    private float krotMoveInterval = 0;
+    private float krotMoveInterval = 1;
+    private float hitPoints = 100f;
 
     public Krot(float x, float y, float width, float height, World boxWorld, GameWorld gameWorld) {
         super(x, y, width, height, boxWorld, gameWorld);
-    }
-
-    @Override
-    protected Body initBody() {
-        BodyDef bd = new BodyDef();
-        bd.position.set(origX, origY);
-        bd.type = BodyDef.BodyType.DynamicBody;
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(this.width, this.height);
-
-        FixtureDef fd = new FixtureDef();
-        fd.density = 0.4f;
-        fd.friction = 0.5f;
-        fd.restitution = 0.5f;
-        fd.shape = shape;
-
-        Body body = boxWorld.createBody(bd);
-        body.createFixture(fd);
-        body.setUserData(this);
-        shape.dispose();
-        return body;
     }
 
     public void walk() {
@@ -49,21 +27,28 @@ public class Krot extends BaseModel {
         body.setLinearVelocity(new Vector2(0, 0));
     }
 
+    public void acceptDamage(float dmg) {
+        this.hitPoints -= dmg;
+    }
+
     public void changeDirection() {
         this.forward = !forward;
     }
 
     @Override
-    protected Vector2 initOrigin() {
-        return new Vector2(origX, origY);
-    }
-
-    @Override
     public void update(float delta) {
         krotMoveInterval += delta;
-        if (krotMoveInterval >= 2) {
+        if (krotMoveInterval >= 1) {
             walk();
             krotMoveInterval = 0;
         }
+    }
+
+    public float getHitPoints() {
+        return hitPoints;
+    }
+
+    public void die() {
+        boxWorld.destroyBody(body);
     }
 }
